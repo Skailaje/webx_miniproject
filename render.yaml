@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: microscope-booking
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        value: your-secret-key-here-make-it-strong-and-unique
+      - key: MONGODB_URI
+        value: mongodb+srv://2022sannidhikailaje:54RrO9UGeXFcRv0c@cluster0.vjepzgz.mongodb.net/webx_microscope?retryWrites=true&w=majority
