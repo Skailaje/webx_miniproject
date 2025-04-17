@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    body {
+        background-image: url('https://img.freepik.com/premium-photo/motor-neuron-microscope-lab-ai_175356-14090.jpg'); /* Replace with your image link */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .form-container {
+        background-color: rgba(0, 0, 0, 0.91);
+        max-width: 500px;
+        margin: 60px auto;
+        padding: 40px 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        color: white;
+    }
+
+    .form-container h2 {
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+    }
+
+    .form-container label {
+        color: orange;
+        font-weight: 500;
+    }
+
+    .form-control {
+        background-color: #333;
+        color: white;
+        border: 1px solid grey;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
+    .form-control:focus {
+        border-color: orange;
+        box-shadow: none;
+    }
+
+    .btn-primary {
+        background-color: orange;
+        border: none;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .btn-primary:hover {
+        background-color: #cc8400;
+    }
+    .btn-primary:active {
+        background-color:rgb(117, 78, 6);
+    }
+    
+
+    .btn-secondary {
+        background-color: grey;
+        border: none;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a5a5a;
+    }
+    
+      
+</style>
+
+<div class="form-container">
+    <h2>Update Booking</h2>
+    <h5 class="text-center mb-4">{{ microscope.name }}</h5>
+    <form method="POST">
+        <label for="date">Date</label>
+        <input type="date" class="form-control" id="date" name="date" value="{{ booking.date }}" required>
+
+        <label for="start_time">Start Time</label>
+        <input type="time" class="form-control" id="start_time" name="start_time" value="{{ booking.start_time }}" required>
+
+        <label for="end_time">End Time</label>
+        <input type="time" class="form-control" id="end_time" name="end_time" value="{{ booking.end_time }}" required>
+
+        <button type="submit" class="btn btn-primary">Update Booking</button>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

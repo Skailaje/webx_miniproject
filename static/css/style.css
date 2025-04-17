@@ -1,0 +1,398 @@
+
+
+
+/* Global Styles */
+body {
+    background-color: #f9fafb;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border-bottom: 2px solid #f97316;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #f97316;
+    border-color: #f97316;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #ea580c;
+    border-color: #d97706;
+}
+
+.btn-outline-primary {
+    color: #f97316;
+    border-color: #f97316;
+}
+
+.btn-outline-primary:hover {
+    background-color: #f97316;
+    color: #fff;
+}
+
+/* Cards */
+.card {
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    border: none;
+    margin-bottom: 1.5rem;
+    border-radius: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* Card Header */
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+}
+
+/* Badge */
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+    background-color: #f97316;
+    color: white;
+}
+
+/* Feature Cards */
+.feature-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #e0e0e0;
+    border-radius: 1rem;
+    background-color: rgb(255, 255, 255);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+    border-color: #f97316;
+}
+
+
+/* Icon Accent */
+.text-orange {
+    color: #f97316 !important;
+}
+
+.bg-orange {
+    background-color: #f97316 !important;
+    color: #fff !important;
+}
+
+/* Table */
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    border-top: none;
+    background-color: #f3f4f6;
+}
+
+/* Forms */
+.form-control:focus,
+.form-select:focus {
+    border-color: #f97316;
+    box-shadow: 0 0 0 0.25rem rgba(249, 115, 22, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 1rem;
+    }
+
+    .table-responsive {
+        margin-bottom: 0;
+    }
+}
+
+/* Alert Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.alert {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Hero Section Styling */
+.hero-section {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(249, 115, 22, 0.8)), url('/static/images/hero-microscope.jpg') center/cover no-repeat;
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.hero-section p {
+    font-size: 1.25rem;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Microscope Section Styles */
+#microscopes {
+    background-color: #f2f2f2;  /* Grey background */
+    padding: 50px 0;
+}
+
+#microscopes h2 {
+    font-size: 2.5rem;
+    color: var(--secondary-color);
+    font-weight: 700;
+}
+
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.card-text {
+    font-size: 1rem;
+    color: var(--accent-color);
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card .btn {
+    transition: background-color 0.3s ease;
+}
+
+.card .btn:hover {
+    background-color: #adabaa;
+}
+
+/* Hover effect on card */
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.card .btn-orange {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.card .btn-orange:hover {
+    background-color: #e65100;
+    border-color: #e65100;
+}
+
+.card .btn-outline-secondary {
+    color: #6c757d;
+    border-color: #6c757d;
+}
+
+.card .btn-outline-secondary:hover {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    #microscopes h2 {
+        font-size: 2rem;
+    }
+
+    .card-img-top {
+        height: 180px;
+    }
+}
+
+#testimonials .testimonial-card {
+    transition: transform 0.3s ease;
+  }
+  #testimonials .testimonial-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  }
+  .carousel-control-prev-icon,
+  .carousel-control-next-icon {
+    background-color: #ff6f00;
+  }
+
+  .footer {
+    background-color: var(--dark-grey);
+    color: white;
+    padding: 2rem 0;
+    margin-top: 3rem;
+}
+
+:root {
+    --primary-blue: #1a5f7a;
+    --secondary-blue: #3498db;
+    --light-blue: #e3f2fd;
+    --primary-orange: #f39c12;
+    --light-orange: #fff3e0;
+    --primary-grey: #5a5a5a;
+    --light-grey: #f8f9fa;
+    --dark-grey: #343a40;
+}
+
+body {
+    background-color: var(--light-grey);
+    color: var(--primary-grey);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar {
+    background-color: var(--primary-blue);
+}
+
+.navbar-brand, .nav-link {
+    color: white !important;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+    color: white;
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.microscope-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    margin-bottom: 2rem;
+}
+
+.microscope-img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-bottom: 3px solid var(--primary-orange);
+}
+
+.microscope-info {
+    padding: 2rem;
+}
+
+.microscope-name {
+    color: var(--primary-blue);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.specs-title {
+    font-weight: 600;
+    color: var(--primary-blue);
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.spec-item {
+    display: flex;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.spec-label {
+    font-weight: 600;
+    width: 130px;
+    color: var(--primary-grey);
+}
+
+.spec-value {
+    flex: 1;
+}
+
+.applications-section {
+    background-color: var(--light-blue);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.application-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-left: 4px solid var(--primary-orange);
+}
+
+.application-title {
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.book-btn {
+    background-color: var(--primary-orange);
+    border: none;
+    padding: 0.75rem 2rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.book-btn:hover {
+    background-color: #b5b5b5;
+    transform: translateY(-2px);
+}
+
+.back-btn {
+    color: var(--primary-blue);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.back-btn i {
+    margin-right: 0.5rem;
+}
+  

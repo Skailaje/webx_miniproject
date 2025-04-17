@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section style="font-family: 'Segoe UI', sans-serif; background-color: #f8f9fa; padding: 5rem 1rem;">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 bg-white rounded-4 shadow d-flex flex-wrap overflow-hidden" style="min-height: 500px;">
+
+        <!-- Left Side: Illustration Image -->
+        <div class="col-md-6 d-none d-md-block p-0">
+          <img src="https://img.freepik.com/premium-photo/closeup-shot-microscope-with-metal-lens-laboratory-neural-network-ai-generated_76080-37182.jpg" alt="Register Illustration" class="img-fluid h-100 w-100" style="object-fit: cover;">
+        </div>
+
+        <!-- Right Side: Register Form -->
+        <div class="col-md-6 p-5" style="background-color: rgb(255, 255, 255); color: white;">
+          <h3 class="text-center mb-4" style="color: black;">Register</h3>
+          <form method="POST">
+            <div class="mb-3">
+              <label for="name" class="form-label" style="color: black;">Full Name</label>
+              <input type="text" class="form-control rounded-3" id="name" name="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label" style="color: black;">Email address</label>
+              <input type="email" class="form-control rounded-3" id="email" name="email" required>
+            </div>
+            <div class="mb-4">
+              <label for="password" class="form-label" style="color: black;">Password</label>
+              <input type="password" class="form-control rounded-3" id="password" name="password" required>
+            </div>
+            <div class="d-grid">
+              <button type="submit" style="width: 100%; padding: 0.75rem; background-color: orange; border: none; border-radius: 12px; color: white; font-weight: bold; cursor: pointer;">Register</button>
+            </div>
+          </form>
+          <div class="text-center mt-4" style="color: black;">
+            <p>Already have an account? <a href="{{ url_for('login') }}" style="color: orange;">Login here</a></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

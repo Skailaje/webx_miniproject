@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="text-center">Book Microscope Slot</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="microscope_id" class="form-label">Select Microscope</label>
+                        <select class="form-select" id="microscope_id" name="microscope_id" required>
+                            <option value="">Choose a microscope</option>
+                            {% for microscope in microscopes %}
+                                <option value="{{ microscope._id }}">{{ microscope.name }} ({{ microscope.type }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="start_time" class="form-label">Start Time</label>
+                            <input type="time" class="form-control" id="start_time" name="start_time" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="end_time" class="form-label">End Time</label>
+                            <input type="time" class="form-control" id="end_time" name="end_time" required>
+                        </div>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Book Slot</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.getElementById('date');
+        const today = new Date().toISOString().split('T')[0];
+        dateInput.min = today;
+        
+        // Set default time to current time rounded to nearest hour
+        const now = new Date();
+        const startTime = document.getElementById('start_time');
+        const endTime = document.getElementById('end_time');
+        
+        startTime.value = `${String(now.getHours()).padStart(2, '0')}:00`;
+        endTime.value = `${String(now.getHours() + 1).padStart(2, '0')}:00`;
+    });
+</script>
+{% endblock %} 

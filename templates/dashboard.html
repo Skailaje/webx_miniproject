@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex" style="min-height: 100vh;">
+
+    <!-- Sidebar -->
+    <div class="bg-dark text-white p-3" style="width: 250px;">
+        <h5 class="text-white mb-4">Dashboard</h5>
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2">
+                <a href="{{ url_for('dashboard') }}" class="nav-link text-white {% if request.path == url_for('dashboard') %}bg-warning rounded{% endif %}">
+                    <i class="fas fa-calendar-check me-2"></i> My Bookings
+                </a>
+            </li>
+            <li class="nav-item mb-2">
+                <a href="{{ url_for('book') }}" class="nav-link text-white">
+                    <i class="fas fa-plus-circle me-2"></i> Book New Slot
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ url_for('home') }}" class="nav-link text-white">
+                    <i class="fas fa-microscope me-2"></i> View Microscopes
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold">My Bookings</h4>
+            
+            <!-- Filter Controls -->
+            <div class="d-flex gap-2">
+                <!-- Date Range Selection -->
+                <select id="date-range" class="form-select w-auto">
+                    <option value="today">Today</option>
+                    <option value="weekly" selected>This Week</option>
+                    <option value="monthly">This Month</option>
+                </select>
+                
+                <!-- Status Filter -->
+                <select id="status-filter" class="form-select w-auto">
+                    <option value="all" selected>All Statuses</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="pending">Pending</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <!-- Upcoming Booking Card -->
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-calendar-day text-primary me-2"></i>Next Booking</h5>
+                        <p class="card-text" id="upcoming-booking">Electron Microscope - Apr 18, 2025, 09:00 AM</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Total Bookings Card -->
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-calendar-alt text-success me-2"></i>Total Bookings</h5>
+                        <p class="card-text" id="total-bookings">12</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Status Breakdown Card -->
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-tasks text-warning me-2"></i>Status Breakdown</h5>
+                        <div id="status-breakdown">
+                            <div class="d-flex justify-content-between">
+                                <span>Confirmed:</span>
+                                <span id="confirmed-count" class="badge bg-success">8</span>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mt-1">
+                                <span>Cancelled:</span>
+                                <span id="cancelled-count" class="badge bg-secondary">1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Most Used Microscope -->
+            <div class="col-md-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-microscope text-info me-2"></i>Most Used Microscope</h5>
+                        <p class="card-text" id="most-used-microscope">Confocal Microscope (5 bookings)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Charts -->
+       
+
+        <!-- Bookings Table - Kept Dynamic -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Booking Details</h5>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="bookings-table">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Microscope</th>
+                                <th>Date</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Status</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bookings-table-body">
+                            {% if bookings %}
+                                {% for booking in bookings %}
+                                    <tr data-date="{{ booking.date }}" data-status="{{ booking.status }}">
+                                        <td>{{ booking.microscope_name }}</td>
+                                        <td>{{ booking.date }}</td>
+                                        <td>{{ booking.start_time }}</td>
+                                        <td>{{ booking.end_time }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ 'success' if booking.status == 'confirmed' else ('warning' if booking.status == 'pending' else 'secondary') }}">
+                                                {{ booking.status }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            {% if booking.status != 'cancelled' %}
+                                                <a href="{{ url_for('update_booking', booking_id=booking._id) }}" class="text-primary" title="Edit Booking">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if booking.status != 'cancelled' %}
+                                                <form method="POST" action="{{ url_for('cancel_booking', booking_id=booking._id) }}" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this booking?')">
+                                                    <button type="submit" class="btn btn-link text-danger p-0" title="Cancel Booking">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-3">
+                                        <div class="alert alert-info mb-0">
+                                            <i class="fas fa-info-circle"></i> No bookings found. <a href="{{ url_for('book') }}" class="alert-link">Book a slot now!</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateRangeDropdown = document.getElementById('date-range');
+        const statusFilterDropdown = document.getElementById('status-filter');
+        
+        // Create static charts immediately
+        initializeCharts();
+        
+        // Add event listeners for the filter dropdowns
+        dateRangeDropdown.addEventListener('change', handleFilters);
+        statusFilterDropdown.addEventListener('change', handleFilters);
+        
+        function handleFilters() {
+            const selectedRange = dateRangeDropdown.value;
+            const selectedStatus = statusFilterDropdown.value;
+            
+            // Update static stats to simulate changed data
+            updateStaticStats(selectedRange, selectedStatus);
+            
+            // Call the original filter function to maintain dynamic table functionality
+            filterBookings();
+        }
+        
+        // This is the original function from your code - kept for table filtering
+        function filterBookings() {
+            const selectedRange = dateRangeDropdown.value;
+            const selectedStatus = statusFilterDropdown.value;
+            
+            // Make API call to filter bookings
+            fetch(`/filter-bookings?date_range=${selectedRange}&status=${selectedStatus}`, {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                const bookings = data.bookings;
+                // Only update the table, not the stats (we're using static stats)
+                updateBookingsTable(bookings);
+            })
+            .catch(error => {
+                console.error('Error fetching bookings:', error);
+                
+                // In case of error (when no backend is available), display a message
+                document.getElementById('bookings-table-body').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-3">
+                            <div class="alert alert-warning mb-0">
+                                <i class="fas fa-exclamation-circle"></i> 
+                                Cannot connect to backend. In a complete implementation, 
+                                this table would update based on your selected filters.
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+        
+        // This is the original function from your code - kept for table updating
+        function updateBookingsTable(bookings) {
+            const bookingsTableBody = document.getElementById('bookings-table-body');
+            
+            // Clear the current table rows
+            bookingsTableBody.innerHTML = '';
+    
+            if (bookings.length === 0) {
+                // Display a "no bookings" message when there are no bookings to show
+                const noBookingsRow = document.createElement('tr');
+                noBookingsRow.innerHTML = `
+                    <td colspan="7" class="text-center py-3">
+                        <div class="alert alert-info mb-0">
+                            No bookings found for the selected filters.
+                        </div>
+                    </td>
+                `;
+                bookingsTableBody.appendChild(noBookingsRow);
+                return;
+            }
+    
+            // Loop through each booking and add a new row to the table
+            bookings.forEach(booking => {
+                const row = document.createElement('tr');
+                row.setAttribute('data-date', booking.date);
+                row.setAttribute('data-status', booking.status);
+    
+                // Determine the badge color based on status
+                let badgeColor;
+                switch(booking.status) {
+                    case 'confirmed': 
+                        badgeColor = 'success';
+                        break;
+                    case 'pending': 
+                        badgeColor = 'warning';
+                        break;
+                    case 'cancelled': 
+                        badgeColor = 'secondary';
+                        break;
+                    default: 
+                        badgeColor = 'info';
+                }
+    
+                // Add columns to the row
+                row.innerHTML = `
+                    <td>${booking.microscope_name}</td>
+                    <td>${booking.date}</td>
+                    <td>${booking.start_time}</td>
+                    <td>${booking.end_time}</td>
+                    <td>
+                        <span class="badge bg-${badgeColor}">
+                            ${booking.status}
+                        </span>
+                    </td>
+                    <td>
+                        ${booking.status !== 'cancelled' ? `<a href="/update-booking/${booking._id}" class="text-primary" title="Edit Booking"><i class="fas fa-edit"></i></a>` : ''}
+                    </td>
+                    <td>
+                        ${booking.status !== 'cancelled' ? `<form method="POST" action="/cancel-booking/${booking._id}" class="d-inline" onsubmit="return confirm('Are you sure you want to cancel this booking?')"><button type="submit" class="btn btn-link text-danger p-0" title="Cancel Booking"><i class="fas fa-trash-alt"></i></button></form>` : ''}
+                    </td>
+                `;
+    
+                // Append the row to the table
+                bookingsTableBody.appendChild(row);
+            });
+        }
+        
+        // Chart objects to ensure they can be updated
+        let statusChart = null;
+        let timelineChart = null;
+        
+        // Initialize charts for the first time
+        function initializeCharts() {
+            const statusCtx = document.getElementById('status-chart').getContext('2d');
+            const timelineCtx = document.getElementById('timeline-chart').getContext('2d');
+            
+            // Status chart (doughnut)
+            statusChart = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Confirmed', 'Pending', 'Cancelled'],
+                    datasets: [{
+                        data: [8, 3, 1],
+                        backgroundColor: [
+                            '#28a745', // success - green
+                            '#ffc107', // warning - yellow
+                            '#6c757d'  // secondary - gray
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+            
+            // Timeline chart (bar)
+            timelineChart = new Chart(timelineCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Apr 17', 'Apr 18', 'Apr 19', 'Apr 20', 'Apr 21', 'Apr 22', 'Apr 23'],
+                    datasets: [{
+                        label: 'Bookings',
+                        data: [2, 1, 3, 2, 1, 2, 1],
+                        backgroundColor: '#007bff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Update static stats based on filter selections
+        function updateStaticStats(dateRange, statusFilter) {
+            // Simulate different data for different filter combinations
+            let upcomingBooking, totalBookings, confirmedCount, pendingCount, cancelledCount, mostUsedMicroscope;
+            let statusData, timelineLabels, timelineCounts;
+            
+            // Update based on date range
+            switch(dateRange) {
+                case 'today':
+                    upcomingBooking = "Electron Microscope - Today, 04:00 PM";
+                    totalBookings = "3";
+                    confirmedCount = "2";
+                    pendingCount = "1";
+                    cancelledCount = "0";
+                    mostUsedMicroscope = "Electron Microscope (2 bookings)";
+                    statusData = [2, 1, 0];
+                    timelineLabels = ['09:00', '12:00', '15:00', '18:00'];
+                    timelineCounts = [1, 0, 2, 0];
+                    break;
+                case 'monthly':
+                    upcomingBooking = "Phase Contrast Microscope - Apr 18, 10:00 AM";
+                    totalBookings = "25";
+                    confirmedCount = "15";
+                    pendingCount = "7";
+                    cancelledCount = "3";
+                    mostUsedMicroscope = "Confocal Microscope (12 bookings)";
+                    statusData = [15, 7, 3];
+                    timelineLabels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                    timelineCounts = [6, 8, 7, 4];
+                    break;
+                case 'weekly':
+                default:
+                    upcomingBooking = "Electron Microscope - Apr 18, 09:00 AM";
+                    totalBookings = "12";
+                    confirmedCount = "8";
+                    pendingCount = "3";
+                    cancelledCount = "1";
+                    mostUsedMicroscope = "Confocal Microscope (5 bookings)";
+                    statusData = [8, 3, 1];
+                    timelineLabels = ['Apr 17', 'Apr 18', 'Apr 19', 'Apr 20', 'Apr 21', 'Apr 22', 'Apr 23'];
+                    timelineCounts = [2, 1, 3, 2, 1, 2, 1];
+                    break;
+            }
+            
+            // Further modify based on status filter
+            if (statusFilter !== 'all') {
+                if (statusFilter === 'confirmed') {
+                    totalBookings = confirmedCount;
+                    statusData = [parseInt(confirmedCount), 0, 0];
+                } else if (statusFilter === 'pending') {
+                    totalBookings = pendingCount;
+                    statusData = [0, parseInt(pendingCount), 0];
+                    upcomingBooking = "No confirmed upcoming bookings";
+                } else if (statusFilter === 'cancelled') {
+                    totalBookings = cancelledCount;
+                    statusData = [0, 0, parseInt(cancelledCount)];
+                    upcomingBooking = "No confirmed upcoming bookings";
+                }
+                
+                // Reduce timeline counts proportionally
+                timelineCounts = timelineCounts.map(count => Math.max(0, Math.floor(count / 2)));
+            }
+            
+            // Update statistics elements
+            document.getElementById('upcoming-booking').textContent = upcomingBooking;
+            document.getElementById('total-bookings').textContent = totalBookings;
+            document.getElementById('confirmed-count').textContent = confirmedCount;
+            document.getElementById('pending-count').textContent = pendingCount;
+            document.getElementById('cancelled-count').textContent = cancelledCount;
+            document.getElementById('most-used-microscope').textContent = mostUsedMicroscope;
+            
+            // Update charts
+            updateCharts(statusData, timelineLabels, timelineCounts);
+        }
+        
+        // Update both charts with new data
+        function updateCharts(statusData, timelineLabels, timelineCounts) {
+            // Update status chart
+            statusChart.data.datasets[0].data = statusData;
+            statusChart.update();
+            
+            // Update timeline chart
+            timelineChart.data.labels = timelineLabels;
+            timelineChart.data.datasets[0].data = timelineCounts;
+            timelineChart.update();
+        }
+        
+        // Initial filter call to load table data
+        filterBookings();
+    });
+</script>
+{% endblock %}

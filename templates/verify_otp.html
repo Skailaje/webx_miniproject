@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="d-flex justify-content-center align-items-center" style="height: 100vh; background-color: #f2f2f2;">
+  <div class="card p-4 shadow rounded-4" style="width: 400px;">
+    <h4 class="mb-3 text-center" style="color: #333;">OTP Verification</h4>
+    <form method="POST">
+      <div class="mb-3">
+        <label for="otp" class="form-label">Enter OTP sent to your email</label>
+        <input type="text" class="form-control rounded-3" id="otp" name="otp" required>
+      </div>
+      <div class="d-grid">
+        <button type="submit" class="btn btn-warning rounded-pill">Verify OTP</button>
+      </div>
+    </form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="alert alert-warning mt-3" role="alert">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+  </div>
+</section>
+{% endblock %}

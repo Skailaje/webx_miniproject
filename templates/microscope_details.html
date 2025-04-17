@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>{{ microscope.name }} - WebX Microscope</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue:rgb(3, 24, 39);
+            --secondary-blue:rgb(4, 43, 70);
+            --light-blue: #e3f2fd;
+            --primary-orange: #f39c12;
+            --light-orange: #fff3e0;
+            --primary-grey: #5a5a5a;
+            --light-grey: #f8f9fa;
+            --dark-grey: #343a40;
+        }
+        
+        body {
+            background-color: var(--light-grey);
+            color: var(--primary-grey);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--primary-blue);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .page-title {
+            font-weight: 600;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .microscope-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .microscope-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary-orange);
+        }
+        
+        .microscope-info {
+            padding: 2rem;
+        }
+        
+        .microscope-name {
+            color: var(--primary-blue);
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .specs-title {
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .spec-item {
+            display: flex;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .spec-label {
+            font-weight: 600;
+            width: 130px;
+            color: var(--primary-grey);
+        }
+        
+        .spec-value {
+            flex: 1;
+        }
+        
+        .applications-section {
+            background-color: var(--light-blue);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .application-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary-orange);
+        }
+        
+        .application-title {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .book-btn {
+            background-color: var(--primary-orange);
+            border: none;
+            padding: 0.75rem 2rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .book-btn:hover {
+            background-color: #e67e22;
+            transform: translateY(-2px);
+        }
+        
+        .back-btn {
+            color: var(--primary-blue);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .back-btn i {
+            margin-right: 0.5rem;
+        }
+        
+       
+    </style>
+{% endblock %}
+
+{% block content %}
+    <!-- Navigation -->
+   
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <h1 class="page-title">{{ microscope.name }}</h1>
+            <p class="lead">High-precision research instrument for advanced scientific discoveries</p>
+        </div>
+    </div>
+
+    <!-- Microscope Details -->
+    <div class="container">
+        <a href="{{ url_for('home') }}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to All Microscopes
+        </a>
+        
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="microscope-card">
+                    <img src="{{ url_for('static', filename=microscope.image_url) }}" alt="{{ microscope.name }}" class="microscope-img">
+                    <div class="microscope-info">
+                        <h2 class="microscope-name">{{ microscope.name }}</h2>
+                        <p class="lead">{{ microscope.description }}</p>
+                        
+                        <h3 class="specs-title">Specifications</h3>
+                        <div class="spec-item">
+                            <div class="spec-label">Type</div>
+                            <div class="spec-value">{{ microscope.type }}</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Location</div>
+                            <div class="spec-value">{{ microscope.location }}</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Status</div>
+                            <div class="spec-value">
+                                {% if microscope.status == 'available' %}
+                                <span class="badge bg-success">Available</span>
+                                {% else %}
+                                <span class="badge bg-danger">Unavailable</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        {% if microscope.type.strip() == 'Laser Scanning' %}
+                        <div class="spec-item">
+                            <div class="spec-label">Resolution</div>
+                            <div class="spec-value">Up to 200 nm lateral, 500 nm axial</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Laser Sources</div>
+                            <div class="spec-value">405nm, 488nm, 561nm, 633nm</div>
+                        </div>
+                        {% elif microscope.type.strip() == 'Transmission' %}
+                        <div class="spec-item">
+                            <div class="spec-label">Resolution</div>
+                            <div class="spec-value">Up to 0.5 nm</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Acceleration Voltage</div>
+                            <div class="spec-value">80-200 kV</div>
+                        </div>
+                        {% elif microscope.type.strip() == 'Widefield' %}
+                        <div class="spec-item">
+                            <div class="spec-label">Camera</div>
+                            <div class="spec-value">sCMOS, 95% quantum efficiency</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Filter Sets</div>
+                            <div class="spec-value">DAPI, FITC, TRITC, Cy5</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <h3 class="mb-3">Interested?</h3>
+                        <p>Book this microscope for your research needs</p>
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('book') }}" class="btn btn-primary book-btn w-100">Book Now</a>
+                        {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-primary book-btn w-100">Login to Book</a>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">Operation Hours</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <span>Monday - Friday</span>
+                            <span>8:00 AM - 6:00 PM</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Saturday</span>
+                            <span>9:00 AM - 1:00 PM</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2">
+                            <span>Sunday</span>
+                            <span>Closed</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header bg-orange text-white">
+                        <h5 class="mb-0">Support</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Need help with this microscope?</p>
+                        <p><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</p>
+                        <p><i class="fas fa-envelope me-2"></i> support@webxmicroscope.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Applications Section -->
+        <div class="applications-section">
+            <h3 class="specs-title">Applications and Importance</h3>
+            <div class="row">
+                {% if microscope.type.strip() == 'Laser Scanning' %}
+
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">3D Cell Imaging</h4>
+                        <p>Enables detailed three-dimensional visualization of cell structures and organelles, critical for understanding cellular organization and function.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Live Cell Dynamics</h4>
+                        <p>Allows for observation of dynamic processes within living cells, such as protein trafficking, cell division, and cellular responses to stimuli.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Co-localization Studies</h4>
+                        <p>Permits visualization of multiple cellular components simultaneously, allowing researchers to determine if different molecules are present in the same location.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Tissue Section Analysis</h4>
+                        <p>Provides detailed imaging of tissue sections with optical sectioning capability, eliminating out-of-focus blur and improving contrast.</p>
+                    </div>
+                </div>
+                {% elif microscope.type.strip() == 'Transmission' %}
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Nanomaterial Analysis</h4>
+                        <p>Essential for characterizing the structure and properties of nanomaterials with atomic-level resolution, critical for materials science and nanotechnology.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Structural Biology</h4>
+                        <p>Enables visualization of macromolecular structures such as proteins, viruses, and cellular components at near-atomic resolution.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Vaccine Development</h4>
+                        <p>Critical for examining virus particles and their interactions with antibodies, facilitating vaccine research and development.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Semiconductor Research</h4>
+                        <p>Enables examination of semiconductor interfaces and defects, crucial for advancing microelectronics and computing technologies.</p>
+                    </div>
+                </div>
+                {% elif microscope.type.strip() == 'Widefield' %}
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Immunofluorescence</h4>
+                        <p>Widely used for visualizing specific proteins in cells and tissues using fluorescently labeled antibodies, essential for cell biology and pathology.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Cytogenetics</h4>
+                        <p>Used for fluorescence in situ hybridization (FISH) studies to detect specific DNA sequences on chromosomes, important for genetic research and diagnostics.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Time-lapse Imaging</h4>
+                        <p>Enables monitoring of biological processes over time, such as cell migration, division, and morphological changes.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="application-card">
+                        <h4 class="application-title">Drug Discovery</h4>
+                        <p>Critical for high-content screening assays to evaluate the effects of drug candidates on cellular functions and morphology.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    
+    
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}
